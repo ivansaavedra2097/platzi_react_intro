@@ -1,33 +1,62 @@
-import logo from './logo.svg';
 import './App.css';
 import { TodoCounter } from './Components/TodoCounter.js';
 import { TodoItem } from './Components/TodoItem.js';
-import {TodoSearch} from './Components/TodoSearch.js';
+import { TodoSearch } from './Components/TodoSearch.js';
 import { TodoList } from "./Components/TodoList.js";
 import { CreateTodoButton } from "./Components/CreateTodoButton.js";
+import { useState } from 'react';
 
-const todos = [
-  {text: '123', completed: true},
-  {text: '456', completed: false},
-  {text: '789', completed: false}
-]
+const testTodos = [
+  { text: '123', completed: true },
+  { text: '456', completed: false },
+  { text: '789', completed: false },
+  { text: 'nueva nota', completed: true }
+];
 
 function App() {
+
+  const [todos, setTodos] = useState(testTodos);
+  const [searchValue, setSearchValue] = useState('');
+
+  // const completedTodos = todos.filter(todo => todo.completed === true);
+  const completedTodos = todos.filter(todo => !!todo.completed).length;
+  const totalTodos = todos.length;
+
+  //buscando todos
+  let searchedTodos = [];
+
+  if(!searchValue.length > 0 ){
+    searchedTodos = todos;
+  } else {
+    searchedTodos = todos.filter(todo => {
+      const todoText = todo.text.toLowerCase();
+      const searchText = searchValue.toLowerCase();
+      
+      return todoText.includes(searchText);
+    });
+  }
+
   return (
     <div className="App">
       <div className='App-container'>
-        <TodoCounter />
-        <TodoSearch />
+        <TodoCounter
+          total={totalTodos}
+          completed={completedTodos} />
+        <TodoSearch
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
 
         <TodoList>
-          {todos.map( todo => (
-            <TodoItem 
-              key={todo.text} 
-              text={todo.text} 
-              completed ={todo.completed}
-              />
+
+          {searchedTodos.map(todo => (
+            <TodoItem
+              key={todo.text}
+              text={todo.text}
+              completed={todo.completed}
+            />
           ))}
-          <TodoItem />
+
         </TodoList>
 
         <CreateTodoButton />
