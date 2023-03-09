@@ -21,7 +21,9 @@ function TodoItem(props) {
             <span 
                 className='Icon Icon-delete'
                 onClick={props.onDelete}
-            ><BsFillTrashFill /></span>
+            >
+                <BsFillTrashFill />
+            </span>
         </li>
     )
 }
